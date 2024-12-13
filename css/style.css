@@ -169,8 +169,76 @@ main {
 
 
   /* Small devices (portrait tablets and large phones, 600px and up) */
-  @media only screen and (min-width: 600px) and (max-width: 767px) {}
+  @media only screen and (min-width: 600px) and (max-width: 767px) {
+
+    main{
+        .alingImage {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: row;
+    
+            img {
+                width: 25vw;
+            }
+        }
+    }
+
+    .pokemon-card {
+        background-color: transparent;
+        border-radius: 2vw;
+        padding: 2w;
+        width: 27.5%;
+        text-align: center;
+        margin-top: 2vw;
+        border: none;
+        color: light;
+    }
+
+
+.pokemon-image {
+    width: 15vw;
+    height: auto;
+}
+}
 
  /* Extra small devices (phones, 600px and down) */
  @media only screen and (max-width: 600px) {
+    header{
+        img {
+            width: 30%;
+            height: 80%;
+        }
+    }
+
+    main{
+        width: 95%;
+        .alingImage {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: row;
+    
+            img {
+                width: 40vw;
+            }
+        }
+    }
+
+    .pokemon-card {
+        background-color: transparent;
+        border-radius: 2vw;
+        padding: 2w;
+        width: 45%;
+        text-align: center;
+        margin-top: 2vw;
+        border: none;
+        color: light;
+    }
+
+
+.pokemon-image {
+    width: 25vw;
+    height: auto;
+}
  }
