@@ -4,23 +4,43 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="shortcut icon" href="assets/pkmnLogo.png" />
-    <script src="javascript/script.js"></script>
+    <link rel="icon" type="image/x-icon" href="assets/pkmnLogo.ico">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
     <link rel="stylesheet" href="css/style.css">
     <title>Ultimate Pokemon API</title>
 </head>
-
-<body>
+<body onload="fetchPokemonList()">
     <header>
-        <img src="css/assets/logo.png">
 
-        <section>
-            <input type="text" id="pokemonName" placeholder="POKEMON NAME OR ID" onkeypress="searchKey()" />
-            <button onclick="fetchPokemon()">Search</button>
-            <button onclick="prevPokemon()">
-                << /button>
-                    <button onclick="nextPokemon()">></button>
-        </section>
+        <nav class="navbar navbar-expand-lg navbar-light bg-light">
+            <div class="container-fluid">
+                <img src="assets/logo.png">
+              <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarTogglerDemo02" aria-controls="navbarTogglerDemo02" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+              </button>
+              <div class="collapse navbar-collapse" id="navbarTogglerDemo02">
+                <ul class="navbar-nav ms-auto">
+                  <li class="nav-item">
+                    <button id="listButton" onclick="showPokemonList()">ListAll</button>
+                  </li>
+                  <li class="nav-item">
+                    <button onclick="playMusic()">Play Music</button>
+                  </li>
+                  <li class="nav-item">
+                    <button onclick="muteMusic()">Mute Music</button>
+                  </li>
+                  <li class="nav-item">
+                    <input type="text" id="pokemonName" placeholder="POKEMON NAME OR ID" onkeypress="searchKey()" />
+                    <button onclick="fetchPokemon()">Search</button>
+                    <button onclick="prevPokemon()">
+                        < </button>
+                            <button onclick="nextPokemon()">></button>
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </nav>
     </header>
 
     <main>
@@ -35,20 +55,30 @@
                 <h2><text>ID: </text> <span id="pokemonId"></span></h2>
             </article>
 
-            <article id="slider">
-                <article>
-                    <img id="pokemonImage" src="" alt="Imagem do Pokémon" />
-                    <img id="pokemonImageBack" src="" alt="Imagem do Pokémon" />
-                </article>
-        
-                <article>
-                    <img id="pokemonImageShiny" src="" alt="Imagem do Pokémon Shiny" />
-                    <img id="pokemonImageShinyBack" src="" alt="Imagem do Pokémon Shiny" />
-                </article>
+            <article id="carouselExampleIndicators" class="carousel slide" data-bs-ride="carousel">
+                <div class="carousel-indicators">
+                    <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="0"
+                        class="active" aria-current="true" aria-label="Slide 1" style="background-color: orangered;"></button>
+                    <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="1"
+                        aria-label="Slide 2" style="background-color: orangered;"></button>
+                </div>
+
+                <div class="carousel-inner">
+                    <div class="carousel-item active">
+                        <section class="alingImage">
+                        <img id="pokemonImage" src=""  alt="...">
+                        <img id="pokemonImageBack" src="" alt="...">
+                        </section>
+                    </div>
+                    <div class="carousel-item">
+                        <section class="alingImage">
+                        <img id="pokemonImageShiny" src=""  alt="...">
+                        <img id="pokemonImageShinyBack" src=""  alt="...">
+                        </section>
+                    </div>
+                </div>
             </article>
-        
-            <button id="changeButton">Mudar Imagens</button>
-        
+
             <article>
                 <p><strong>Order: </strong> <span id="pokemonOrder"></span> </p>
                 <p><strong>Types: </strong> <span id="pokemonTypes"></span></p>
@@ -61,7 +91,19 @@
                 <p><strong>Moves: </strong> <span id="pokemonMoves"></span></p>
             </article>
         </section>
+
+        <hr>
+
+        <section id="listSection" style="display: none;">
+            <h2>Pokemon List</h2>
+            <div id="pokemonList" class="pokemon-list"></div>
+        </section>
     </main>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+        crossorigin="anonymous"></script>
+    <script src="javascript/script.js"></script>
 </body>
 
 </html>
