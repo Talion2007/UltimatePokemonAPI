@@ -209,7 +209,6 @@ main {
  /* Extra small devices (phones, 600px and down) */
  @media only screen and (max-width: 600px) {
     header{
-        opacity: 100%;
         img {
             width: 30%;
             height: 80%;
@@ -218,7 +217,6 @@ main {
 
     main{
         width: 95%;
-        opacity: 100%;
         .alingImage {
             display: flex;
             justify-content: center;
