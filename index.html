@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="shortcut icon" href="assets/pkmnLogo.png" />
+    <script src="javascript/script.js"></script>
+    <link rel="stylesheet" href="css/style.css">
+    <title>Ultimate Pokemon API</title>
+</head>
+
+<body>
+    <header>
+        <img src="css/assets/logo.png">
+
+        <section>
+            <input type="text" id="pokemonName" placeholder="POKEMON NAME OR ID" onkeypress="searchKey()" />
+            <button onclick="fetchPokemon()">Search</button>
+            <button onclick="prevPokemon()">
+                << /button>
+                    <button onclick="nextPokemon()">></button>
+        </section>
+    </header>
+
+    <main>
+        <section>
+            <p id="loadingMessage" style="display: none">Loading...</p>
+            <p id="errorMessage" style="display: none"></p>
+
+            <p class="pokemon-inf" id="pokemonInfo" style="display: none">
+
+            <article>
+                <h2 id="pokemonTitle"></h2>
+                <h2><text>ID: </text> <span id="pokemonId"></span></h2>
+            </article>
+
+            <article id="slider">
+                <article>
+                    <img id="pokemonImage" src="" alt="Imagem do Pokémon" />
+                    <img id="pokemonImageBack" src="" alt="Imagem do Pokémon" />
+                </article>
+        
+                <article>
+                    <img id="pokemonImageShiny" src="" alt="Imagem do Pokémon Shiny" />
+                    <img id="pokemonImageShinyBack" src="" alt="Imagem do Pokémon Shiny" />
+                </article>
+            </article>
+        
+            <button id="changeButton">Mudar Imagens</button>
+        
+            <article>
+                <p><strong>Order: </strong> <span id="pokemonOrder"></span> </p>
+                <p><strong>Types: </strong> <span id="pokemonTypes"></span></p>
+                <p><strong>Base Experience: </strong> <span id="pokemonBaseExperience"></span></p>
+                <p><strong>Height: </strong> <span id="pokemonHeight"></span> meters</p>
+                <p><strong>Weight: </strong> <span id="pokemonWeight"></span> kilograms</p>
+                <p><strong>Abilities: </strong> <span id="pokemonAbilities"></span></p>
+                <p><strong>Stats: </strong> <span id="pokemonStats"></span></p>
+                <p><strong>Held Items: </strong> <span id="pokemonHeldItems"></span></p>
+                <p><strong>Moves: </strong> <span id="pokemonMoves"></span></p>
+            </article>
+        </section>
+    </main>
+</body>
+
+</html>
