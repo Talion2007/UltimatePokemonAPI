@@ -19,7 +19,7 @@ header {
     flex-direction: row;
 
 
-    background-color: whitesmoke;
+    background-color: antiquewhite;
     padding: 1%;
     opacity: 80%;
     width: 100%;
@@ -31,7 +31,7 @@ header {
     }
 
     button {
-        background-color: whitesmoke;
+        background-color: antiquewhite;
         border: none;
         color: orangered;
     }
@@ -39,15 +39,19 @@ header {
     input {
         background-color: orangered;
         border: none;
-        color: whitesmoke;
+        color: antiquewhite;
         margin-left: 1vw;
         border-radius: 2.5vw;
     }
     
     input::placeholder {
     text-align: center;
-        color: whitesmoke;
+        color: antiquewhite;
     }
+
+    .navbar-custom {
+        background-color: antiquewhite;
+      }
 }
 
 main {
@@ -58,7 +62,7 @@ main {
     flex-direction: column;
 
 
-    background-color: whitesmoke;
+    background-color: antiquewhite;
     opacity: 75%;
     width: 80%;
     height: auto;
@@ -205,6 +209,7 @@ main {
  /* Extra small devices (phones, 600px and down) */
  @media only screen and (max-width: 600px) {
     header{
+        opacity: 100%;
         img {
             width: 30%;
             height: 80%;
@@ -213,7 +218,7 @@ main {
 
     main{
         width: 95%;
-        opacity: 0;
+        opacity: 100%;
         .alingImage {
             display: flex;
             justify-content: center;
