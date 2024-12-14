@@ -188,8 +188,8 @@ async function init() {
       document.getElementById("pokemonOrder").textContent = data.order;
       document.getElementById("pokemonTypes").textContent = data.types.map((type) => type.type.name).join(", ");
       document.getElementById("pokemonBaseExperience").textContent = data.base_experience;
-      document.getElementById("pokemonHeight").textContent = data.height;
-      document.getElementById("pokemonWeight").textContent = data.weight;
+      document.getElementById("pokemonHeight").textContent = data.height / 10;
+      document.getElementById("pokemonWeight").textContent = data.weight / 10;
       document.getElementById("pokemonAbilities").textContent = data.abilities.map((ability) => ability.ability.name).join(", ");
       document.getElementById("pokemonStats").innerHTML = data.stats.map((stat) => {
         return `<p>${stat.stat.name}: ${stat.base_stat}</p>`;
