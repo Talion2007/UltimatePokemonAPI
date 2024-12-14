@@ -1,431 +1,710 @@
+<!DOCTYPE html>
+<html lang="en">
 
-const currentID = 1;
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/x-icon" href="assets/pkmnLogo.ico">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <link rel="stylesheet" href="css/style.css">
+    <title>Ultimate Pokemon API</title>
+</head>
+<body onload="fetchPokemonList()">
+    <header>
+
+        <nav class="navbar navbar-expand-lg navbar-light navbar-custom">
+            <div class="container-fluid">
+                <img src="assets/logo.png">
+              <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarTogglerDemo02" aria-controls="navbarTogglerDemo02" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+              </button>
+              <div class="collapse navbar-collapse" id="navbarTogglerDemo02">
+                <ul class="navbar-nav ms-auto">
+                  <li class="nav-item">
+                    <button id="listButton" onclick="showPokemonList()">ListAll</button>
+                  </li>
+                  <li class="nav-item">
+                    <button onclick="playMusic()">Play Music</button>
+                  </li>
+                  <li class="nav-item">
+                    <button onclick="muteMusic()">Mute Music</button>
+                  </li>
+                  <li class="nav-item">
+                    <input type="text" id="pokemonName" placeholder="POKEMON NAME OR ID" onkeypress="searchKey()" />
+                    <button onclick="fetchPokemon()">Search</button>
+                    <button onclick="prevPokemon()">
+                        < </button>
+                            <button onclick="nextPokemon()">></button>
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </nav>
+    </header>
+
+    <main>
+        <section>
+            <p id="loadingMessage" style="display: none">Loading...</p>
+            <p id="errorMessage" style="display: none"></p>
+
+            <p class="pokemon-inf" id="pokemonInfo" style="display: none">
+
+            <article>
+                <h2 id="pokemonTitle"></h2>
+                <h2><text>ID: </text> <span id="pokemonId"></span></h2>
+            </article>
+
+            <article id="carouselExampleIndicators" class="carousel slide" data-bs-ride="carousel">
+                <div class="carousel-indicators">
+                    <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="0"
+                        class="active" aria-current="true" aria-label="Slide 1" style="background-color: orangered;"></button>
+                    <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="1"
+                        aria-label="Slide 2" style="background-color: orangered;"></button>
+                </div>
+
+                <div class="carousel-inner">
+                    <div class="carousel-item active">
+                        <section class="alingImage">
+                        <img id="pokemonImage" src=""  alt="...">
+                        <img id="pokemonImageBack" src="" alt="...">
+                        </section>
+                    </div>
+                    <div class="carousel-item">
+                        <section class="alingImage">
+                        <img id="pokemonImageShiny" src=""  alt="...">
+                        <img id="pokemonImageShinyBack" src=""  alt="...">
+                        </section>
+                    </div>
+                </div>
+            </article>
+
+            <article class="duo">
+            <div>
+                <p><strong>Order: </strong> <span id="pokemonOrder"></span> </p>
+                <p><strong>Types: </strong> <span id="pokemonTypes"></span></p>
+                <p><strong>Base Experience: </strong> <span id="pokemonBaseExperience"></span></p>
+                <p><strong>Height: </strong> <span id="pokemonHeight"></span> meters</p>
+                <p><strong>Weight: </strong> <span id="pokemonWeight"></span> kilograms</p>
+                <p><strong>Abilities: </strong> <span id="pokemonAbilities"></span></p>
+                <p><strong>Held Items: </strong> <span id="pokemonHeldItems"></span></p>
+            </div>
+            <div>
+                <p><strong>Stats: </strong> <span id="pokemonStats"></span></p>
+            </div>
+
+                <p><strong>Moves: </strong> <span id="pokemonMoves"></span></p>
+            </article>
+        </section>
+
+        <section id="listSection" style="display: none;">
+            <hr>
+            <h2>Pokemon List</h2>
+            <div id="pokemonList" class="pokemon-list"></div>
+        </section>
+    </main>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+        crossorigin="anonymous"></script>
+    <script src="javascript/script.js"></script>
+</body>
+
+</html>
+
+body {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    flex-direction: column;
+
+    background-image: url(../assets/pkmn.png);
+    background-repeat: no-repeat;
+    background-position: center;
+    background-attachment: fixed;
+    background-size: cover;
+    margin: 0%;
+}
+
+header {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    flex-direction: row;
+
+
+    background-color: antiquewhite;
+    padding: 1%;
+    opacity: 80%;
+    width: 100%;
+    height: auto;
+
+    img {
+        width: 20%;
+        height: 80%;
+    }
+
+    button {
+        background-color: antiquewhite;
+        border: none;
+        color: orangered;
+    }
+
+    input {
+        background-color: orangered;
+        border: none;
+        color: antiquewhite;
+        margin-left: 1vw;
+        border-radius: 2.5vw;
+    }
+    
+    input::placeholder {
+    text-align: center;
+        color: antiquewhite;
+    }
+
+    .navbar-custom {
+        background-color: antiquewhite;
+      }
+}
+
+main {
+    text-align: center;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    flex-direction: column;
+
+
+    background-color: antiquewhite;
+    opacity: 75%;
+    width: 80%;
+    height: auto;
+    padding: 2.5%;
+
+    .alingImage {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-direction: row;
+
+        img {
+            width: 15vw;
+        }
+    }
+
+    .duo{
+        display: flex;
+        flex-direction: row;
+        flex-wrap: wrap;
+
+        div {
+            width: 50%;
+            margin-bottom: 2.5vh;
+        }
+    }
+}
+
+.pokemon-list {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 20px; 
+}
+
+
+.pokemon-card {
+    background-color: transparent;
+    border-radius: 2vw;
+    padding: 2w;
+    width: 10vw;
+    text-align: center;
+    margin-top: 2vw;
+    border: none;
+    color: light;
+
+    .pokemon-image {
+        width: 10vw;
+        height: auto;
+    }
+}
+
+.pokemon-card:hover {
+    background-color: lightskyblue;
+}
+
+/* Extra large devices (large laptops and desktops, 1200px and up) */
+@media only screen and (min-width: 1200px) and (max-width: 1550px) {   
+    .pokemon-card {
+        background-color: transparent;
+        border-radius: 2vw;
+        padding: 2w;
+        width: 17.5%;
+        text-align: center;
+        margin-top: 2vw;
+        border: none;
+        color: light;
+    }
+}
+
+ /* Large devices (laptops/desktops, 992px and up) */
+ @media only screen and (min-width: 992px) and (max-width: 1199px) {
+    .pokemon-card {
+        background-color: transparent;
+        border-radius: 2vw;
+        padding: 2w;
+        width: 20%;
+        text-align: center;
+        margin-top: 2vw;
+        border: none;
+        color: light;
+    }
+ }
+
+ /* Medium devices (landscape tablets, 768px and up) */
+ @media only screen and (min-width: 768px) and (max-width: 991px) {
+
+    main{
+        .alingImage {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: row;
+    
+            img {
+                width: 25vw;
+            }
+        }
+
+
+    }
+
+    .pokemon-card {
+        background-color: transparent;
+        border-radius: 2vw;
+        padding: 2w;
+        width: 27.5%;
+        text-align: center;
+        margin-top: 2vw;
+        border: none;
+        color: light;
+    }
+ }
+
+
+.pokemon-image {
+    width: 15vw;
+    height: auto;
+}
+
+
+  /* Small devices (portrait tablets and large phones, 600px and up) */
+  @media only screen and (min-width: 600px) and (max-width: 767px) {
+
+    main{
+        .alingImage {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: row;
+    
+            img {
+                width: 25vw;
+            }
+        }
+
+        .duo{
+            display: flex;
+            flex-direction: column;
+            flex-wrap: wrap;
+    
+            div {
+                width: 100%;
+            }
+        }
+    }
+
+    .pokemon-card {
+        background-color: transparent;
+        border-radius: 2vw;
+        padding: 2w;
+        width: 27.5%;
+        text-align: center;
+        margin-top: 2vw;
+        border: none;
+        color: light;
+    }
+
+
+.pokemon-image {
+    width: 15vw;
+    height: auto;
+}
+}
+
+ /* Extra small devices (phones, 600px and down) */
+ @media only screen and (max-width: 600px) {
+    header{
+        img {
+            width: 30%;
+            height: 80%;
+        }
+    }
+
+    main{
+        width: 95%;
+        .alingImage {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: row;
+    
+            img {
+                width: 40vw;
+            }
+        }
+
+        .duo{
+            display: flex;
+            flex-direction: column;
+            flex-wrap: wrap;
+    
+            div {
+                width: 100%;
+            }
+        }
+    }
+
+    .pokemon-card {
+        background-color: transparent;
+        border-radius: 2vw;
+        padding: 2w;
+        width: 45%;
+        text-align: center;
+        margin-top: 2vw;
+        border: none;
+        color: light;
+    }
+
+
+.pokemon-image {
+    width: 25vw;
+    height: auto;
+}
+ }
+
+ function searchKey() {
+    if (event.key === "Enter") {
+      fetchPokemon();
+    }
+  }
+  
+  document.addEventListener("keydown", (event) => {
+    if (event.key === "ArrowRight") {
+      nextPokemon();
+    }
+  });
+  
+  document.addEventListener("keydown", (event) => {
+    if (event.key === "ArrowLeft") {
+      prevPokemon();
+    }
+  });
+
+  
+  
 
 async function init() {
-  const initID = 25;
-
-  try {
-    const response = await fetch(`https://pokeapi.co/api/v2/pokemon/${initID}`);
-
-    if (!response.ok) {
-      throw new Error(`Error fetching Pokemon: ${response.statusText}`);
+    const initID = 25;
+  
+    try {
+      const response = await fetch(`https://pokeapi.co/api/v2/pokemon/${initID}`);
+  
+      if (!response.ok) {
+        throw new Error(`Error fetching Pokemon: ${response.statusText}`);
+      }
+  
+      const data = await response.json();
+      console.log(data);
+  
+      // Chama a função para exibir os dados
+      displayPokemonData(data);
+    } catch (error) {
+      console.error("Error fetching Pokemon:", error);
+      document.getElementById("errorMessage").textContent =
+        "Error fetching Pokemon. Please try again.";
+      document.getElementById("errorMessage").style.display = "block";
+    } finally {
+      document.getElementById("loadingMessage").style.display = "none";
     }
-
-    const data = await response.json();
-    console.log(data);
-
-    //! SETTING DATA IN HTML
-    document.getElementById("pokemonInfo").style.display = "block";
-
-    //! SETTING POKEMON NAME & ID
-    document.getElementById("pokemonTitle").textContent =
-      data.name.toUpperCase();
-
-    document.getElementById("pokemonId").textContent = data.id;
-
-    //! SETTING POKEMON IMAGE
-    document.getElementById("pokemonImage").src = data.sprites.front_default;
-
-    document.getElementById("pokemonImage").alt = `Image of ${data.name}`;
-
-    document.getElementById("pokemonImageBack").src = data.sprites.back_default;
-
-    document.getElementById("pokemonImageBack").alt = `Image of ${data.name}`;
-
-    //! SETTING POKEMON IMAGE SHINY
-    document.getElementById("pokemonImageShiny").src = data.sprites.front_shiny;
-
-    document.getElementById("pokemonImageShiny").alt = `Image of ${data.name}`;
-
-    document.getElementById("pokemonImageShinyBack").src =
-      data.sprites.back_shiny;
-
-    document.getElementById(
-      "pokemonImageShinyBack"
-    ).alt = `Image of ${data.name}`;
-
-    //! SETTING POKEMON STATS
-    document.getElementById("pokemonOrder").textContent = data.order;
-
-    document.getElementById("pokemonTypes").textContent = data.types
-      .map((type) => type.type.name)
-      .join(", ");
-
-    document.getElementById("pokemonBaseExperience").textContent =
-      data.base_experience;
-
-    document.getElementById("pokemonHeight").textContent = data.height;
-
-    document.getElementById("pokemonWeight").textContent = data.weight;
-
-    document.getElementById("pokemonAbilities").textContent = data.abilities
-      .map((ability) => ability.ability.name)
-      .join(", ");
-
-    document.getElementById("pokemonStats").textContent = data.stats
-      .map((stat) => stat.stat.name)
-      .join(", ");
-
-    document.getElementById("pokemonHeldItems").textContent = data.held_items
-      .map((item) => item.item.name)
-      .join(", ");
-
-    document.getElementById("pokemonMoves").textContent = data.moves
-      .map((move) => move.move.name)
-      .join(", ");
-  } catch (error) {
-    console.error("Error fetching Pokemon:", error);
-    document.getElementById("errorMessage").textContent =
-      "Error fetching Pokemon. Please try again.";
-    document.getElementById("errorMessage").style.display = "block";
-  } finally {
-    document.getElementById("loadingMessage").style.display = "none";
-  }
-}
-
-init();
-
-
-async function fetchPokemon(currentID) {
-  const pokemonName = document.getElementById("pokemonName").value.trim();
-
-  if (!pokemonName) {
-    document.getElementById("errorMessage").textContent =
-      " PLEASE ENTER A POKEMON NAME OR ID";
-    document.getElementById("errorMessage").style.display = "block";
   }
 
-  document.getElementById("errorMessage").style.display = "none";
-  document.getElementById("loadingMessage").style.display = "block";
+  init();
 
-  try {
-    const response = await fetch(
-      `https://pokeapi.co/api/v2/pokemon/${pokemonName.toLowerCase()}`
-    );
-
-    if (!response.ok) {
-      throw new Error("POKEMON NOT FOUND");
+  async function fetchPokemon(currentID) {
+    const pokemonName = document.getElementById("pokemonName").value.trim();
+  
+    if (!pokemonName) {
+      document.getElementById("errorMessage").textContent =
+        "PLEASE ENTER A POKEMON NAME OR ID";
+      document.getElementById("errorMessage").style.display = "block";
+      return;
     }
-
-    const data = await response.json();
-    console.log(data);
-
-    currentID = parseInt(data.id);
-
-    //! SETTING DATA IN HTML
-    document.getElementById("pokemonInfo").style.display = "block";
-
-    //! SETTING POKEMON NAME & ID
-    document.getElementById("pokemonTitle").textContent =
-      data.name.toUpperCase();
-    document.getElementById("pokemonId").textContent = data.id;
-
-    //! SETTING POKEMON IMAGE
-    document.getElementById("pokemonImage").src = data.sprites.front_default;
-
-    document.getElementById("pokemonImage").alt = `Image of ${data.name}`;
-
-    document.getElementById("pokemonImageBack").src = data.sprites.back_default;
-
-    document.getElementById("pokemonImageBack").alt = `Image of ${data.name}`;
-
-    //! SETTING POKEMON IMAGE SHINY
-    document.getElementById("pokemonImageShiny").src = data.sprites.front_shiny;
-
-    document.getElementById("pokemonImageShiny").alt = `Image of ${data.name}`;
-
-    document.getElementById("pokemonImageShinyBack").src =
-      data.sprites.back_shiny;
-
-    document.getElementById(
-      "pokemonImageShinyBack"
-    ).alt = `Image of ${data.name}`;
-
-    //! SETTING POKEMON STATS
-    document.getElementById("pokemonOrder").textContent = data.order;
-
-    document.getElementById("pokemonTypes").textContent = data.types
-      .map((type) => type.type.name)
-      .join(", ");
-
-    document.getElementById("pokemonBaseExperience").textContent =
-      data.base_experience;
-
-    document.getElementById("pokemonHeight").textContent = data.height;
-
-    document.getElementById("pokemonWeight").textContent = data.weight;
-
-    document.getElementById("pokemonAbilities").textContent = data.abilities
-      .map((ability) => ability.ability.name)
-      .join(", ");
-
-    document.getElementById("pokemonStats").textContent = data.stats
-      .map((stat) => stat.stat.name)
-      .join(", ");
-
-    document.getElementById("pokemonHeldItems").textContent = data.held_items
-      .map((item) => item.item.name)
-      .join(", ");
-
-    document.getElementById("pokemonMoves").textContent = data.moves
-      .map((move) => move.move.name)
-      .join(", ");
-  } catch (error) {
-    document.getElementById("errorMessage").textContent = error.message;
-    document.getElementById("errorMessage").style.display = "block";
-    document.getElementById("pokemonInfo").style.display = "none";
-  } finally {
-    document.getElementById("loadingMessage").style.display = "none";
-  }
-
-  return currentID;
-}
-
-async function fetchPokemonId(idVar, currentID) {
-  window.scrollTo({ top: 0, behavior: "smooth" });
-
-  currentID = idVar;
-
-  try {
-    const response = await fetch(`https://pokeapi.co/api/v2/pokemon/${idVar}`);
-
-    if (!response.ok) {
-      throw new Error(`Error fetching Pokemon: ${response.statusText}`);
+  
+    document.getElementById("errorMessage").style.display = "none";
+    document.getElementById("loadingMessage").style.display = "block";
+  
+    try {
+      const response = await fetch(
+        `https://pokeapi.co/api/v2/pokemon/${pokemonName.toLowerCase()}`
+      );
+  
+      if (!response.ok) {
+        throw new Error("POKEMON NOT FOUND");
+      }
+  
+      const data = await response.json();
+      console.log(data);
+  
+      // Chama a função para exibir os dados
+      displayPokemonData(data);
+  
+    } catch (error) {
+      document.getElementById("errorMessage").textContent = error.message;
+      document.getElementById("errorMessage").style.display = "block";
+      document.getElementById("pokemonInfo").style.display = "none";
+    } finally {
+      document.getElementById("loadingMessage").style.display = "none";
     }
-
-    const data = await response.json();
-    console.log(data);
-
-    //! SETTING DATA IN HTML
-    document.getElementById("pokemonInfo").style.display = "block";
-
-    //! SETTING POKEMON NAME & ID
-    document.getElementById("pokemonTitle").textContent =
-      data.name.toUpperCase();
-    document.getElementById("pokemonId").textContent = data.id;
-
-    //! SETTING POKEMON IMAGE
-    document.getElementById("pokemonImage").src = data.sprites.front_default;
-
-    document.getElementById("pokemonImage").alt = `Image of ${data.name}`;
-
-    document.getElementById("pokemonImageBack").src = data.sprites.back_default;
-
-    document.getElementById("pokemonImageBack").alt = `Image of ${data.name}`;
-
-    //! SETTING POKEMON IMAGE SHINY
-    document.getElementById("pokemonImageShiny").src = data.sprites.front_shiny;
-
-    document.getElementById("pokemonImageShiny").alt = `Image of ${data.name}`;
-
-    document.getElementById("pokemonImageShinyBack").src =
-      data.sprites.back_shiny;
-
-    document.getElementById(
-      "pokemonImageShinyBack"
-    ).alt = `Image of ${data.name}`;
-
-    //! SETTING POKEMON STATS
-    document.getElementById("pokemonOrder").textContent = data.order;
-
-    document.getElementById("pokemonTypes").textContent = data.types
-      .map((type) => type.type.name)
-      .join(", ");
-
-    document.getElementById("pokemonBaseExperience").textContent =
-      data.base_experience;
-
-    document.getElementById("pokemonHeight").textContent = data.height;
-
-    document.getElementById("pokemonWeight").textContent = data.weight;
-
-    document.getElementById("pokemonAbilities").textContent = data.abilities
-      .map((ability) => ability.ability.name)
-      .join(", ");
-
-    document.getElementById("pokemonStats").textContent = data.stats
-      .map((stat) => stat.stat.name)
-      .join(", ");
-
-    document.getElementById("pokemonHeldItems").textContent = data.held_items
-      .map((item) => item.item.name)
-      .join(", ");
-
-    document.getElementById("pokemonMoves").textContent = data.moves
-      .map((move) => move.move.name)
-      .join(", ");
-  } catch (error) {
-    console.error("Error fetching Pokemon:", error);
-    document.getElementById("errorMessage").textContent =
-      "Error fetching Pokemon. Please try again.";
-    document.getElementById("errorMessage").style.display = "block";
-  } finally {
-    document.getElementById("loadingMessage").style.display = "none";
   }
-}
-
-async function nextPokemon(currentID) {
-  const nextID = parseInt(document.getElementById("pokemonId").textContent) + 1;
-
-  currentID = nextID;
-
-  try {
-    const response = await fetch(`https://pokeapi.co/api/v2/pokemon/${nextID}`);
-
-    if (!response.ok) {
-      throw new Error(`Error fetching Pokemon: ${response.statusText}`);
+  
+  async function nextPokemon(currentID) {
+    const nextID = parseInt(document.getElementById("pokemonId").textContent) + 1;
+    currentID = nextID;
+  
+    try {
+      const response = await fetch(`https://pokeapi.co/api/v2/pokemon/${nextID}`);
+  
+      if (!response.ok) {
+        throw new Error(`Error fetching Pokemon: ${response.statusText}`);
+      }
+  
+      const data = await response.json();
+      console.log(data);
+  
+      // Chama a função para exibir os dados
+      displayPokemonData(data);
+  
+    } catch (error) {
+      console.error("Error fetching Pokemon:", error);
+      document.getElementById("errorMessage").textContent =
+        "Error fetching Pokemon. Please try again.";
+      document.getElementById("errorMessage").style.display = "block";
+    } finally {
+      document.getElementById("loadingMessage").style.display = "none";
     }
-
-    const data = await response.json();
-    console.log(data);
-
-    //! SETTING DATA IN HTML
-    document.getElementById("pokemonInfo").style.display = "block";
-
-    //! SETTING POKEMON NAME & ID
-    document.getElementById("pokemonTitle").textContent =
-      data.name.toUpperCase();
-    document.getElementById("pokemonId").textContent = data.id;
-
-     //! SETTING POKEMON IMAGE
-     document.getElementById("pokemonImage").src = data.sprites.front_default;
-
-     document.getElementById("pokemonImage").alt = `Image of ${data.name}`;
- 
-     document.getElementById("pokemonImageBack").src = data.sprites.back_default;
- 
-     document.getElementById("pokemonImageBack").alt = `Image of ${data.name}`;
- 
-     //! SETTING POKEMON IMAGE SHINY
-     document.getElementById("pokemonImageShiny").src = data.sprites.front_shiny;
- 
-     document.getElementById("pokemonImageShiny").alt = `Image of ${data.name}`;
- 
-     document.getElementById("pokemonImageShinyBack").src =
-       data.sprites.back_shiny;
- 
-     document.getElementById(
-       "pokemonImageShinyBack"
-     ).alt = `Image of ${data.name}`;
- 
-     //! SETTING POKEMON STATS
-     document.getElementById("pokemonOrder").textContent = data.order;
- 
-     document.getElementById("pokemonTypes").textContent = data.types
-       .map((type) => type.type.name)
-       .join(", ");
- 
-     document.getElementById("pokemonBaseExperience").textContent =
-       data.base_experience;
- 
-     document.getElementById("pokemonHeight").textContent = data.height;
- 
-     document.getElementById("pokemonWeight").textContent = data.weight;
- 
-     document.getElementById("pokemonAbilities").textContent = data.abilities
-       .map((ability) => ability.ability.name)
-       .join(", ");
- 
-     document.getElementById("pokemonStats").textContent = data.stats
-       .map((stat) => stat.stat.name)
-       .join(", ");
- 
-     document.getElementById("pokemonHeldItems").textContent = data.held_items
-       .map((item) => item.item.name)
-       .join(", ");
- 
-     document.getElementById("pokemonMoves").textContent = data.moves
-       .map((move) => move.move.name)
-       .join(", ");
-  } catch (error) {
-    console.error("Error fetching Pokemon:", error);
-    document.getElementById("errorMessage").textContent =
-      "Error fetching Pokemon. Please try again.";
-    document.getElementById("errorMessage").style.display = "block";
-  } finally {
-    document.getElementById("loadingMessage").style.display = "none";
   }
-}
 
-async function prevPokemon(currentID) {
-  const prevID = parseInt(document.getElementById("pokemonId").textContent) - 1;
-
-  currentID = prevID;
-
-  try {
-    const response = await fetch(`https://pokeapi.co/api/v2/pokemon/${prevID}`);
-
-    if (!response.ok) {
-      throw new Error(`Error fetching Pokemon: ${response.statusText}`);
+  async function prevPokemon(currentID) {
+    const prevID = parseInt(document.getElementById("pokemonId").textContent) - 1;
+    currentID = prevID;
+  
+    try {
+      const response = await fetch(`https://pokeapi.co/api/v2/pokemon/${prevID}`);
+  
+      if (!response.ok) {
+        throw new Error(`Error fetching Pokemon: ${response.statusText}`);
+      }
+  
+      const data = await response.json();
+      console.log(data);
+  
+      // Chama a função para exibir os dados
+      displayPokemonData(data);
+  
+    } catch (error) {
+      console.error("Error fetching Pokemon:", error);
+      document.getElementById("errorMessage").textContent =
+        "Error fetching Pokemon. Please try again.";
+      document.getElementById("errorMessage").style.display = "block";
+    } finally {
+      document.getElementById("loadingMessage").style.display = "none";
     }
-
-    const data = await response.json();
-    console.log(data);
-
-    //! SETTING DATA IN HTML
-    document.getElementById("pokemonInfo").style.display = "block";
-
-    //! SETTING POKEMON NAME & ID
-    document.getElementById("pokemonTitle").textContent =
-      data.name.toUpperCase();
-    document.getElementById("pokemonId").textContent = data.id;
-
-     //! SETTING POKEMON IMAGE
-     document.getElementById("pokemonImage").src = data.sprites.front_default;
-
-     document.getElementById("pokemonImage").alt = `Image of ${data.name}`;
- 
-     document.getElementById("pokemonImageBack").src = data.sprites.back_default;
- 
-     document.getElementById("pokemonImageBack").alt = `Image of ${data.name}`;
- 
-     //! SETTING POKEMON IMAGE SHINY
-     document.getElementById("pokemonImageShiny").src = data.sprites.front_shiny;
- 
-     document.getElementById("pokemonImageShiny").alt = `Image of ${data.name}`;
- 
-     document.getElementById("pokemonImageShinyBack").src =
-       data.sprites.back_shiny;
- 
-     document.getElementById(
-       "pokemonImageShinyBack"
-     ).alt = `Image of ${data.name}`;
- 
-     //! SETTING POKEMON STATS
-     document.getElementById("pokemonOrder").textContent = data.order;
- 
-     document.getElementById("pokemonTypes").textContent = data.types
-       .map((type) => type.type.name)
-       .join(", ");
- 
-     document.getElementById("pokemonBaseExperience").textContent =
-       data.base_experience;
- 
-     document.getElementById("pokemonHeight").textContent = data.height;
- 
-     document.getElementById("pokemonWeight").textContent = data.weight;
- 
-     document.getElementById("pokemonAbilities").textContent = data.abilities
-       .map((ability) => ability.ability.name)
-       .join(", ");
- 
-     document.getElementById("pokemonStats").textContent = data.stats
-       .map((stat) => stat.stat.name)
-       .join(", ");
- 
-     document.getElementById("pokemonHeldItems").textContent = data.held_items
-       .map((item) => item.item.name)
-       .join(", ");
- 
-     document.getElementById("pokemonMoves").textContent = data.moves
-       .map((move) => move.move.name)
-       .join(", ");
-  } catch (error) {
-    console.error("Error fetching Pokemon:", error);
-    document.getElementById("errorMessage").textContent =
-      "Error fetching Pokemon. Please try again.";
-    document.getElementById("errorMessage").style.display = "block";
-  } finally {
-    document.getElementById("loadingMessage").style.display = "none";
   }
-}
+
+  async function fetchPokemonId(idVar, currentID) {
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  
+    currentID = idVar;
+  
+    try {
+      const response = await fetch(`https://pokeapi.co/api/v2/pokemon/${idVar}`);
+  
+      if (!response.ok) {
+        throw new Error(`Error fetching Pokemon: ${response.statusText}`);
+      }
+  
+      const data = await response.json();
+      console.log(data);
+  
+      // Chama a função para exibir os dados
+      displayPokemonData(data);
+  
+    } catch (error) {
+      console.error("Error fetching Pokemon:", error);
+      document.getElementById("errorMessage").textContent =
+        "Error fetching Pokemon. Please try again.";
+      document.getElementById("errorMessage").style.display = "block";
+    } finally {
+      document.getElementById("loadingMessage").style.display = "none";
+    }
+  }  
+
+  async function displayPokemonData(data) {
+    try {
+      // Exibe as informações do Pokémon
+      document.getElementById("pokemonInfo").style.display = "block";
+  
+      // Nome e ID do Pokémon
+      document.getElementById("pokemonTitle").textContent = data.name.toUpperCase();
+      document.getElementById("pokemonId").textContent = data.id;
+  
+      // Imagens do Pokémon
+      document.getElementById("pokemonImage").src = data.sprites.front_default;
+      document.getElementById("pokemonImage").alt = `Image of ${data.name}`;
+      document.getElementById("pokemonImageBack").src = data.sprites.back_default;
+      document.getElementById("pokemonImageBack").alt = `Image of ${data.name}`;
+      document.getElementById("pokemonImageShiny").src = data.sprites.front_shiny;
+      document.getElementById("pokemonImageShiny").alt = `Image of ${data.name}`;
+      document.getElementById("pokemonImageShinyBack").src = data.sprites.back_shiny;
+      document.getElementById("pokemonImageShinyBack").alt = `Image of ${data.name}`;
+  
+      // Estatísticas e outros dados
+      document.getElementById("pokemonOrder").textContent = data.order;
+      document.getElementById("pokemonTypes").textContent = data.types.map((type) => type.type.name).join(", ");
+      document.getElementById("pokemonBaseExperience").textContent = data.base_experience;
+      document.getElementById("pokemonHeight").textContent = data.height;
+      document.getElementById("pokemonWeight").textContent = data.weight;
+      document.getElementById("pokemonAbilities").textContent = data.abilities.map((ability) => ability.ability.name).join(", ");
+      document.getElementById("pokemonStats").innerHTML = data.stats.map((stat) => {
+        return `<p>${stat.stat.name}: ${stat.base_stat}</p>`;
+      }).join('');
+
+      document.getElementById("pokemonHeldItems").textContent = data.held_items.map((item) => item.item.name).join(", ");
+      document.getElementById("pokemonMoves").textContent = data.moves.map((move) => move.move.name).join(", ");
+      
+    } catch (error) {
+      console.error("Error displaying Pokemon data:", error);
+      document.getElementById("errorMessage").textContent = "Error displaying Pokemon data. Please try again.";
+      document.getElementById("errorMessage").style.display = "block";
+    } finally {
+      document.getElementById("loadingMessage").style.display = "none";
+    }
+  }
+  
+
+function showPokemonList() {
+    window.scrollTo({ top: document.body.scrollHeight, behavior: "smooth" });
+    document.getElementById("listSection").style.display = "block";
+  }
+  
+  async function fetchPokemonList() {
+    const pokemonListElement = document.getElementById("pokemonList");
+  
+    for (let i = 1; i <= 1025; i++) {
+      if (i == 1030) break;
+  
+      try {
+        const response = await fetch(`https://pokeapi.co/api/v2/pokemon/${i}`);
+        if (!response.ok) throw new Error("Erro ao buscar dados do Pokémon :(");
+  
+        const data = await response.json();
+  
+        //criação do card do Pokémon
+  
+        const pokemonCard = document.createElement("button");
+        pokemonCard.className = "pokemon-card";
+        pokemonCard.onclick = () => {
+          fetchPokemonId(data.id);
+        };
+  
+        const pokemonImage = document.createElement("img");
+        pokemonImage.src = data.sprites.front_default;
+        pokemonImage.alt = `Imagem de ${data.name}`;
+        pokemonImage.className = "pokemon-image";
+  
+        const pokemonName = document.createElement("h4");
+        pokemonName.textContent = data.name.toUpperCase();
+  
+        const pokemonId = document.createElement("p");
+        pokemonId.textContent = `ID: ${data.id}`;
+  
+        //adiciona os elementos ao Card
+        pokemonCard.appendChild(pokemonImage);
+        pokemonCard.appendChild(pokemonName);
+        pokemonCard.appendChild(pokemonId);
+  
+        //adicona o card á lista
+        pokemonListElement.appendChild(pokemonCard);
+      } catch (error) {
+        console.log("Erro ao buscar dados do Pokémon:", error);
+      }
+    }
+  }
+
+  const musicas = [
+    "assets/Music/02 - Title Screen.mp3",
+    "assets/Music/03 - Game Tutorial.mp3",
+    "assets/Music/04 - Pallet Town.mp3",
+    "assets/Music/05 - Professor Oak.mp3",
+    "assets/Music/06 - Oak Pokémon Lab.mp3",
+    "assets/Music/07 - Strength of a Gym Leader.mp3",
+    "assets/Music/08 - Rival.mp3",
+    "assets/Music/12 - Route 1.mp3",
+    "assets/Music/15 - Pewter City.mp3",
+    "assets/Music/16 - Pokémon Center.mp3",
+    "assets/Music/19 - Viridian Forest.mp3",
+    "assets/Music/23 - Pokémon Gym.mp3",
+    "assets/Music/28 - Route 3.mp3",
+    "assets/Music/30 - Mt. Moon.mp3",
+    "assets/Music/31 - Cerulean City.mp3",
+    "assets/Music/32 - Route 24.mp3",
+    "assets/Music/35 - Vermilion City.mp3",
+    "assets/Music/36 - S.S. Anne.mp3",
+    "assets/Music/37 - Cycling.mp3",
+    "assets/Music/38 - Route 11.mp3",
+    "assets/Music/39 - Lavender Town.mp3",
+    "assets/Music/40 - Pokémon Tower.mp3",
+    "assets/Music/41 - Celadon City.mp3",
+    "assets/Music/42 - Game Corner.mp3",
+    "assets/Music/46 - Rocket Hideout.mp3",
+    "assets/Music/49 - Silph Co..mp3",
+    "assets/Music/51 - Surf.mp3",
+    "assets/Music/53 - Cinnabar Island.mp3",
+    "assets/Music/54 - Pokémon Mansion.mp3",
+    "assets/Music/55 - Pokémon Network Center.mp3",
+    "assets/Music/57 - Sevii Islands Four & Five Islands.mp3",
+    "assets/Music/61 - Sevii Islands.mp3",
+    "assets/Music/62 - Sevii Islands Six & Seven Islands.mp3",
+    "assets/Music/63 - Union Room.mp3",
+    "assets/Music/68 - Victory Road.mp3",
+    "assets/Music/70 - Epilogue.mp3",
+    "assets/Music/71 - Hall of Fame.mp3",
+    "assets/Music/72 - Ending.mp3",
+  ];
+  
+  const musica = new Audio();
+  
+  function playMusic() {
+    const indiceAleatorio = Math.floor(Math.random() * musicas.length);
+    musica.src = musicas[indiceAleatorio];
+    musica.play();
+    musica.addEventListener("ended", playMusic);
+    musica.addEventListener("error", function (err) {
+      console.log("Erro ao carregar áudio:", err);
+    });
+  }
+  
+  function muteMusic() {
+    musica.pause();
+  }

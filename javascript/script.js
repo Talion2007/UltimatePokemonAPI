@@ -257,6 +257,56 @@ function showPokemonList() {
     }
   }
 
+  async function fetchSuggestions() {
+    const input = document.getElementById("pokemonName").value.trim();
+    const suggestionsList = document.getElementById("suggestionsList");
+
+    // Limpa as sugestões anteriores
+    suggestionsList.innerHTML = '';
+
+    // Se o campo estiver vazio, não mostra nada
+    if (input === '') {
+        suggestionsList.style.display = 'none';
+        return;
+    }
+
+    // Tenta buscar as sugestões de Pokémon
+    try {
+        const response = await fetch(`https://pokeapi.co/api/v2/pokemon?limit=1000`);
+        if (!response.ok) {
+            throw new Error('Erro ao buscar dados dos Pokémon.');
+        }
+        const data = await response.json();
+        const pokemonNames = data.results.map(pokemon => pokemon.name);
+
+        // Filtra os nomes dos Pokémon que começam com a string digitada
+        const filteredNames = pokemonNames.filter(name => name.startsWith(input));
+
+        // Exibe as sugestões
+        if (filteredNames.length > 0) {
+            suggestionsList.style.display = 'block';
+            filteredNames.forEach(name => {
+                const li = document.createElement('li');
+                li.textContent = name;
+                li.style.padding = '5px';
+                li.style.cursor = 'pointer';
+                li.onclick = () => {
+                    document.getElementById("pokemonName").value = name;
+                    suggestionsList.style.display = 'none'; // Esconde as sugestões após a seleção
+                    fetchPokemon(); // Chama a função para buscar o Pokémon selecionado
+                };
+                suggestionsList.appendChild(li);
+            });
+        } else {
+            suggestionsList.style.display = 'none';
+        }
+    } catch (error) {
+        console.error("Erro ao buscar sugestões:", error);
+        suggestionsList.style.display = 'none';
+    }
+}
+
+
   const musicas = [
     "assets/Music/02 - Title Screen.mp3",
     "assets/Music/03 - Game Tutorial.mp3",
