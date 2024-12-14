@@ -78,6 +78,17 @@ main {
             width: 15vw;
         }
     }
+
+    .duo{
+        display: flex;
+        flex-direction: row;
+        flex-wrap: wrap;
+
+        div {
+            width: 50%;
+            margin-bottom: 2.5vh;
+        }
+    }
 }
 
 .pokemon-list {
@@ -92,25 +103,24 @@ main {
     background-color: transparent;
     border-radius: 2vw;
     padding: 2w;
-    width: 15%;
+    width: 10vw;
     text-align: center;
     margin-top: 2vw;
     border: none;
     color: light;
+
+    .pokemon-image {
+        width: 10vw;
+        height: auto;
+    }
 }
 
 .pokemon-card:hover {
     background-color: lightskyblue;
 }
 
-
-.pokemon-image {
-    width: 10vw;
-    height: auto;
-}
-
 /* Extra large devices (large laptops and desktops, 1200px and up) */
-@media only screen and (min-width: 1200px) and (max-width: 1400px) {   
+@media only screen and (min-width: 1200px) and (max-width: 1550px) {   
     .pokemon-card {
         background-color: transparent;
         border-radius: 2vw;
@@ -151,6 +161,8 @@ main {
                 width: 25vw;
             }
         }
+
+
     }
 
     .pokemon-card {
@@ -184,6 +196,16 @@ main {
     
             img {
                 width: 25vw;
+            }
+        }
+
+        .duo{
+            display: flex;
+            flex-direction: column;
+            flex-wrap: wrap;
+    
+            div {
+                width: 100%;
             }
         }
     }
@@ -225,6 +247,16 @@ main {
     
             img {
                 width: 40vw;
+            }
+        }
+
+        .duo{
+            display: flex;
+            flex-direction: column;
+            flex-wrap: wrap;
+    
+            div {
+                width: 100%;
             }
         }
     }

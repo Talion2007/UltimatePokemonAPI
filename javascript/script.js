@@ -191,7 +191,10 @@ async function init() {
       document.getElementById("pokemonHeight").textContent = data.height;
       document.getElementById("pokemonWeight").textContent = data.weight;
       document.getElementById("pokemonAbilities").textContent = data.abilities.map((ability) => ability.ability.name).join(", ");
-      document.getElementById("pokemonStats").textContent = data.stats.map((stat) => stat.stat.name).join(", ");
+      document.getElementById("pokemonStats").innerHTML = data.stats.map((stat) => {
+        return `<p>${stat.stat.name}: ${stat.base_stat}</p>`;
+      }).join('');
+
       document.getElementById("pokemonHeldItems").textContent = data.held_items.map((item) => item.item.name).join(", ");
       document.getElementById("pokemonMoves").textContent = data.moves.map((move) => move.move.name).join(", ");
       
