@@ -154,28 +154,14 @@ main {
 /* Extra large devices (large laptops and desktops, 1200px and up) */
 @media only screen and (min-width: 1200px) and (max-width: 1550px) {
   .pokemon-card {
-    background-color: transparent;
-    border-radius: 2vw;
-    padding: 2w;
     width: 17.5%;
-    text-align: center;
-    margin-top: 2vw;
-    border: none;
-    color: light;
   }
 }
 
 /* Large devices (laptops/desktops, 992px and up) */
 @media only screen and (min-width: 992px) and (max-width: 1199px) {
   .pokemon-card {
-    background-color: transparent;
-    border-radius: 2vw;
-    padding: 2w;
     width: 20%;
-    text-align: center;
-    margin-top: 2vw;
-    border: none;
-    color: light;
   }
 }
 
@@ -195,20 +181,13 @@ main {
   }
 
   .pokemon-card {
-    background-color: transparent;
-    border-radius: 2vw;
-    padding: 2w;
     width: 27.5%;
-    text-align: center;
-    margin-top: 2vw;
-    border: none;
-    color: light;
-  }
-}
 
-.pokemon-image {
-  width: 15vw;
-  height: auto;
+    .pokemon-image {
+      width: 15vw;
+      height: auto;
+    }
+  }
 }
 
 /* Small devices (portrait tablets and large phones, 600px and up) */
@@ -237,19 +216,13 @@ main {
   }
 
   .pokemon-card {
-    background-color: transparent;
-    border-radius: 2vw;
-    padding: 2w;
-    width: 27.5%;
-    text-align: center;
-    margin-top: 2vw;
-    border: none;
-    color: light;
-  }
 
-  .pokemon-image {
-    width: 15vw;
-    height: auto;
+    width: 27.5%;
+
+    .pokemon-image {
+      width: 15vw;
+      height: auto;
+    }
   }
 }
 
@@ -295,11 +268,11 @@ main {
     margin-top: 2vw;
     border: none;
     color: light;
-  }
 
-  .pokemon-image {
-    width: 25vw;
-    height: auto;
+    .pokemon-image {
+      width: 25vw;
+      height: auto;
+    }
   }
 
   input {
