@@ -1,3 +1,5 @@
+  //!Async Function Init - Initialize A Pokemon in HTML
+
 function searchKey() {
     if (event.key === "Enter") {
       fetchPokemon();
@@ -16,8 +18,7 @@ function searchKey() {
     }
   });
 
-  
-  
+  //!Async Function Init - Initialize A Pokemon in HTML
 
 async function init() {
     const initID = 25;
@@ -45,6 +46,8 @@ async function init() {
   }
 
   init();
+
+  //!Async Function FetchPokemon - Search Pokemon in API
 
   async function fetchPokemon(currentID) {
     const pokemonName = document.getElementById("pokemonName").value.trim();
@@ -82,6 +85,8 @@ async function init() {
       document.getElementById("loadingMessage").style.display = "none";
     }
   }
+
+  //!Async Function NextPokemon - Show the Pokemon with next ID
   
   async function nextPokemon(currentID) {
     const nextID = parseInt(document.getElementById("pokemonId").textContent) + 1;
@@ -109,6 +114,8 @@ async function init() {
       document.getElementById("loadingMessage").style.display = "none";
     }
   }
+
+    //!Async Function PrevPokemon - Show the Pokemon with prev ID
 
   async function prevPokemon(currentID) {
     const prevID = parseInt(document.getElementById("pokemonId").textContent) - 1;
