@@ -47,45 +47,121 @@ async function init() {
 
   init();
 
-  //!Async Function FetchPokemon - Search Pokemon in API
+ // Adicionar funcionalidade de exibição da cadeia de evolução dos Pokémon
 
-  async function fetchPokemon(currentID) {
-    const pokemonName = document.getElementById("pokemonName").value.trim();
-  
-    if (!pokemonName) {
-      document.getElementById("errorMessage").textContent =
-        "PLEASE ENTER A POKEMON NAME OR ID";
-      document.getElementById("errorMessage").style.display = "block";
-      return;
-    }
-  
-    document.getElementById("errorMessage").style.display = "none";
-    document.getElementById("loadingMessage").style.display = "block";
-  
-    try {
-      const response = await fetch(
-        `https://pokeapi.co/api/v2/pokemon/${pokemonName.toLowerCase()}`
-      );
-  
-      if (!response.ok) {
-        throw new Error("POKEMON NOT FOUND");
+// Função para buscar a cadeia de evolução
+async function fetchEvolutionChain(pokemonId) {
+  try {
+      // Buscar detalhes da espécie do Pokémon
+      const speciesResponse = await fetch(`https://pokeapi.co/api/v2/pokemon-species/${pokemonId}/`);
+      const speciesData = await speciesResponse.json();
+
+      // Verificar se há uma cadeia de evolução
+      if (!speciesData.evolution_chain) {
+          const evolutionChainElement = document.getElementById('evolutionChain');
+          if (evolutionChainElement) {
+              evolutionChainElement.innerHTML = 'Este Pokémon não possui cadeia de evolução.';
+          }
+          return;
       }
-  
-      const data = await response.json();
-      console.log(data);
-  
-      // Chama a função para exibir os dados
-      displayPokemonData(data);
-  
-    } catch (error) {
-      document.getElementById("errorMessage").textContent = error.message;
-      document.getElementById("errorMessage").style.display = "block";
-      document.getElementById("pokemonInfo").style.display = "none";
-    } finally {
-      document.getElementById("loadingMessage").style.display = "none";
-    }
+
+      // Buscar a cadeia de evolução
+      const evolutionResponse = await fetch(speciesData.evolution_chain.url);
+      const evolutionData = await evolutionResponse.json();
+
+      // Renderizar a cadeia de evolução
+      renderEvolutionChain(evolutionData.chain);
+  } catch (error) {
+      console.error('Erro ao buscar a cadeia de evolução:', error);
+      const evolutionChainElement = document.getElementById('evolutionChain');
+      if (evolutionChainElement) {
+          evolutionChainElement.innerHTML = 'Erro ao carregar a cadeia de evolução.';
+      }
+  }
+}
+
+// Função para renderizar a cadeia de evolução
+function renderEvolutionChain(chain) {
+  let evolutionHtml = '';
+
+  function traverseChain(node) {
+      evolutionHtml += `<div class='evolution-node'>
+          <p>${node.species.name}</p>
+          <img src='https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${extractPokemonId(node.species.url)}.png' alt='${node.species.name}'>
+      </div>`;
+
+      if (node.evolves_to.length > 0) {
+          evolutionHtml += '<div class="evolution-arrow">⬇️</div>';
+          node.evolves_to.forEach(traverseChain);
+      }
   }
 
+  traverseChain(chain);
+
+  const evolutionChainElement = document.getElementById('evolutionChain');
+  if (evolutionChainElement) {
+      evolutionChainElement.innerHTML = evolutionHtml;
+  } else {
+      console.error('Elemento evolutionChain não encontrado no DOM.');
+  }
+}
+
+// Função para extrair o ID do Pokémon a partir da URL da espécie
+function extractPokemonId(url) {
+  const parts = url.split('/');
+  return parts[parts.length - 2];
+}
+
+// Modificar a função de busca principal para incluir a cadeia de evolução
+async function fetchPokemon() {
+  const pokemonNameOrId = document.getElementById('pokemonName').value.toLowerCase();
+
+  if (!pokemonNameOrId) {
+      const errorMessage = document.getElementById('errorMessage');
+      if (errorMessage) {
+          errorMessage.innerText = 'Por favor, insira um nome ou ID do Pokémon.';
+          errorMessage.style.display = 'block';
+      }
+      return;
+  }
+
+  try {
+      const response = await fetch(`https://pokeapi.co/api/v2/pokemon/${pokemonNameOrId}`);
+
+      if (!response.ok) {
+          throw new Error('Pokémon não encontrado.');
+      }
+
+      const data = await response.json();
+
+      // Atualizar as informações do Pokémon existente
+      document.getElementById('pokemonTitle').innerText = data.name;
+      document.getElementById('pokemonId').innerText = data.id;
+      document.getElementById('pokemonImage').src = data.sprites.front_default;
+      document.getElementById('pokemonImageBack').src = data.sprites.back_default;
+      document.getElementById('pokemonImageShiny').src = data.sprites.front_shiny;
+      document.getElementById('pokemonImageShinyBack').src = data.sprites.back_shiny;
+      document.getElementById('pokemonOrder').innerText = data.order;
+      document.getElementById('pokemonTypes').innerText = data.types.map(t => t.type.name).join(', ');
+      document.getElementById('pokemonBaseExperience').innerText = data.base_experience;
+      document.getElementById('pokemonHeight').innerText = data.height / 10;
+      document.getElementById('pokemonWeight').innerText = data.weight / 10;
+      document.getElementById('pokemonAbilities').innerText = data.abilities.map(a => a.ability.name).join(', ');
+      document.getElementById('pokemonHeldItems').innerText = data.held_items.map(i => i.item.name).join(', ');
+      document.getElementById('pokemonStats').innerText = data.stats.map(s => `${s.stat.name}: ${s.base_stat}`).join(', ');
+      document.getElementById('pokemonMoves').innerText = data.moves.map(m => m.move.name).join(', ');
+
+      // Chamar a função de evolução
+      fetchEvolutionChain(data.id);
+  } catch (error) {
+      console.error('Erro ao buscar Pokémon:', error);
+      const errorMessage = document.getElementById('errorMessage');
+      if (errorMessage) {
+          errorMessage.innerText = error.message;
+          errorMessage.style.display = 'block';
+      }
+  }
+}
   //!Async Function NextPokemon - Show the Pokemon with next ID
   
   async function nextPokemon(currentID) {
@@ -370,3 +446,77 @@ function showPokemonList() {
   function muteMusic() {
     musica.pause();
   }
+
+  // Adicionar funcionalidade de exibição da cadeia de evolução dos Pokémon
+
+// Função para buscar a cadeia de evolução\async function fetchEvolutionChain(pokemonId) {
+    try {
+        // Buscar detalhes da espécie do Pokémon
+        const speciesResponse = await fetch(`https://pokeapi.co/api/v2/pokemon-species/${pokemonId}/`);
+        const speciesData = await speciesResponse.json();
+
+        // Verificar se há uma cadeia de evolução
+        if (!speciesData.evolution_chain) {
+            document.getElementById('evolutionChain').innerHTML = 'Este Pokémon não possui cadeia de evolução.';
+            return;
+        }
+
+        // Buscar a cadeia de evolução
+        const evolutionResponse = await fetch(speciesData.evolution_chain.url);
+        const evolutionData = await evolutionResponse.json();
+
+        // Renderizar a cadeia de evolução
+        renderEvolutionChain(evolutionData.chain);
+    } catch (error) {
+        console.error('Erro ao buscar a cadeia de evolução:', error);
+        document.getElementById('evolutionChain').innerHTML = 'Erro ao carregar a cadeia de evolução.';
+    }
+}
+
+// Função para renderizar a cadeia de evolução
+function renderEvolutionChain(chain) {
+    let evolutionHtml = '';
+    
+    function traverseChain(node) {
+        evolutionHtml += `<div class='evolution-node'>
+            <p>${node.species.name}</p>
+            <img src='https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${extractPokemonId(node.species.url)}.png' alt='${node.species.name}'>
+        </div>`;
+
+        if (node.evolves_to.length > 0) {
+            evolutionHtml += '<div class="evolution-arrow">⬇️</div>';
+            node.evolves_to.forEach(traverseChain);
+        }
+    }
+
+    traverseChain(chain);
+
+    document.getElementById('evolutionChain').innerHTML = evolutionHtml;
+}
+
+// Função para extrair o ID do Pokémon a partir da URL da espécie
+function extractPokemonId(url) {
+    const parts = url.split('/');
+    return parts[parts.length - 2];
+}
+
+// Modificar a função de busca principal para incluir a cadeia de evolução
+async function fetchPokemon() {
+    const pokemonNameOrId = document.getElementById('pokemonName').value.toLowerCase();
+
+    try {
+        const response = await fetch(`https://pokeapi.co/api/v2/pokemon/${pokemonNameOrId}`);
+        const data = await response.json();
+
+        // Atualizar as informações do Pokémon existente
+        document.getElementById('pokemonTitle').innerText = data.name;
+        document.getElementById('pokemonId').innerText = data.id;
+        document.getElementById('pokemonImage').src = data.sprites.front_default;
+
+        // Chamar a função de evolução
+        fetchEvolutionChain(data.id);
+    } catch (error) {
+        console.error('Erro ao buscar Pokémon:', error);
+        document.getElementById('errorMessage').innerText = 'Erro ao carregar informações do Pokémon.';
+    }
+}
